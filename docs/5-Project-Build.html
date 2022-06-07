@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/index.css">
+    <script src="js/jquery-3.6.0.js"></script>
+    <link rel="stylesheet" href="js/highlight/styles/atom-one-light.min.css">
+    <script src="js/highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+    <a target="_blank" href="https://www.renesas.com/"><img src="img/renesas_logomark_s.png"
+            class="logo"></a><br><br><br>
+
+    <ol id="nav" title="Lab Contents" class="sidebar-lists">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1-Project-Setup.html">1. Project Setup</a></li>
+        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
+        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
+        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
+        <li class="activeListItem"><a class="active" href="5-Project-Build.html">5. Building the Project</a></li>
+        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
+        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+    </ol>
+
+    <h1>5. Building the Project</h1>
+    <p>Here we will guide you through including the application code and building the RL78/G23 128p FPB low power capacitive touch project.
+    </p>
+
+    <h2 id="5.1">5.1 - Application Code</h2>
+    <p>Navigate to the file which contains your <b>main function</b> located in <i>src/{PROJECT_NAME}.c</i> file and <b>replace the contents of the file</b> with:
+    <pre><code class="C">#include "r_smc_entry.h"
+
+/* Make qe_touch_main callable from this file*/
+extern void qe_touch_main(void);
+
+int main(void);
+
+int main(void)
+{
+    EI();
+    qe_touch_main(); /* Call the sample function*/
+    return 0;
+}
+/* END OF MAIN*/</code></pre>
+
+Now navigate to <i>qe_gen/qe_touch_sample.c</i> file and <b>replace the contents of the file</b> with:
+    <pre><code class="C">#include "qe_touch_config.h"
+#include "r_smc_entry.h"
+
+/** Function provided by the smart configurator*/
+extern void R_CTSU_PinSetInit(void);
+
+/** Variable used to read the button press status*/
+uint64_t button_status;
+
+void qe_touch_main(void)
+{
+    fsp_err_t err;
+
+    BSP_ENABLE_INTERRUPT();
+
+    /* Set LED pins as outputs*/
+    PM5_bit.no0 = 0U;
+    PM5_bit.no1 = 0U;
+
+    /* Initialize pins (function created by Smart Configurator) */
+    R_CTSU_PinSetInit();
+
+    /* Set up ELCL for INTIL triggering cap touch in snooze mode*/
+    ELISEL7 = 0x17U; /* Select INTITL signal (ELISEL7, INTC6)*/
+    ELL1SEL0 = 0x08U; /* Link ELISEL7 to ELCL Block 1, Input 0*/
+    ELL1CTL = 0x00U; /* Enable pass through on ELCL Block 1*/
+    ELL1LNK0 = 0x01U; /* Link Input 0 to input of Cell 0 in ELCL Block 1*/
+    ELOSEL6 = 0x01U; /* Link ELCL Block 1, cell 0 output to ELCL output signal 6 (CTSU2 hardware trigger*/
+    ELOENCTL = 0x40U; /* Enable ELCL output signal 6*/
+
+    /* Open Touch middleware */
+    err = RM_TOUCH_Open(g_qe_touch_instance_config01.p_ctrl, g_qe_touch_instance_config01.p_cfg);
+    if (FSP_SUCCESS != err)
+    {
+        while (true) {}
+    }
+
+    /* We are using the DTC - disable interrupts for the CTSUWR and CTSURD interrupts*/
+    MK2H |= 0x40;
+    MK3L |= 0x01;
+
+    /* Enable CTSU to accept hardware trigger */
+    err = RM_TOUCH_ScanStart(g_qe_touch_instance_config01.p_ctrl);
+    if (FSP_SUCCESS != err)
+    {
+        while (true) {}
+    }
+
+    /* Start the timer*/
+    R_Config_ITL000_Start();
+
+    /* Main loop */
+    while (true)
+    {
+        __stop();
+
+        /* Clear interval timer interrupt flags*/
+        if(ITLIF > 0U)
+        {
+            ITLS0 = 0U;
+            ITLIF = 0U;
+        }
+
+        /* Only perform cap touch processing if cap touch interrupt fired*/
+        if(g_qe_touch_flag > 0U)
+        {
+            g_qe_touch_flag = 0U;
+
+            /* Get the button status*/
+            touch_err_t err = RM_TOUCH_DataGet(g_qe_touch_instance_config01.p_ctrl, (uint64_t *)&button_status, NULL, NULL);
+            if (TOUCH_SUCCESS == err)
+            {
+                /* Illuminate LED's as per CTSU button press's*/
+                P5_bit.no1 = ((button_status & 0x1) > 0U) ? 0U : 1U;
+                P5_bit.no0 = ((button_status & 0x2) > 0U) ? 0U : 1U;
+            }
+        }
+    }
+}
+/* END OF MAIN*/</code></pre>
+
+    The animation below shows the inclusion of the code in the project.<br>
+    <a target="_blank" href="img/copycode.gif"><img src="img/copycode.gif" class="zoomable"></a><br>
+
+    </p>
+
+    <h2 id="5.2">5.2 - Build the project</h2>
+    <p>Now to build the project either:<br>
+        <b>[Right-Click] project &rarr; Build Project</b>.<br>
+        <i>or</i><br>
+        Build the currently active (selected) project by clicking on the build icon.<br>
+    </p>
+
+    <br><br>
+    <button class="nextPageButton" onclick="document.location='6-Project-Debug.html'">Next Page...</button>
+
+</body>
+<script src="js/localnav.js"></script>
+
+</html>

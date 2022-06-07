@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/index.css">
+    <script src="js/jquery-3.6.0.js"></script>
+</head>
+
+<body>
+    <a target="_blank" href="https://www.renesas.com/"><img src="img/renesas_logomark_s.png" class="logo"></a><br><br><br>
+
+    <ol id="nav" title="Lab Contents" class="sidebar-lists">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1-Project-Setup.html">1. Project Setup</a></li>
+        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
+        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
+        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
+        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
+        <li class="activeListItem"><a class="active" href="6-Project-Debug.html">6. Debugging the Project</a></li>
+        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+    </ol>
+
+    <h1>6. Debugging the Project</h1>
+    <p>Here we will guide you through debugging/running the RL78/G23 128p FPB low power capacitive touch project.
+    </p>
+
+    <h2 id="6.1">6.1 - The Debug Session</h2>
+    <p>First ensure the project you wish to debug is active by clicking on it.<br>
+        Then select the <b>debug</b> icon.<br>
+        If presented with the "Select Configuration" dialog then select <b>[Project_Name] HardwareDebug</b>.<br><br>
+
+        e<sup>2</sup>studio will then prompt you and ask if you would like to switch to the debug perspective, answer in the affirmative i.e. "Switch" as this
+        will provide you with all the default tools and views used for debugging an embedded application.<br><br>
+
+        When the application first runs, it will pause on entry to the start function, when it does this we need to <b>click the Run button</b>.<br>
+        The program will then run-to and pause at the main function, we then need to <b>click the Run button again</b>.<br><br>
+
+        Now the program is running you can touch the electrodes on the RL78/G23 128p FPB and see the on board LED's illuminate during a press.<br>
+        The video below shows this process.<br><br>
+        <video width="80%" controls>
+        <source src="img/debug_mov.mp4" type="video/mp4">
+        Your browser does not support HTML video.
+      </video><br><br>
+    </p>
+    
+    <br><br>
+    <button class="nextPageButton" onclick="document.location='7-Achieving-Measuring-Low-Power.html'">Finished!</button>
+    
+</body>
+<script src="js/localnav.js"></script>
+
+</html>

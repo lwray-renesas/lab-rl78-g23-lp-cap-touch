@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/index.css">
+    <script src="js/jquery-3.6.0.js"></script>
+    <link rel="stylesheet" href="js/highlight/styles/atom-one-light.min.css">
+    <script src="js/highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+    <a target="_blank" href="https://www.renesas.com/"><img src="img/renesas_logomark_s.png" class="logo"></a><br><br><br>
+
+    <ol id="nav" title="Lab Contents" class="sidebar-lists">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1-Project-Setup.html">1. Project Setup</a></li>
+        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
+        <li class="activeListItem"><a class="active" href="3-Project-Configuration.html">3. Configuring the Project</a></li>
+        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
+        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
+        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
+        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+    </ol>
+
+    <h1>3. Configuring the Project</h1>
+    <p>Here we will guide you through configuring the RL78/G23 128p FPB low power capacitive touch project using the smart configurator.
+    </p>
+
+    <h2 id="3.1">3.1 - Clocks & Supply</h2>
+    <p>Select the <b>Clocks</b> tab of the smart configurator and make the following settings:
+        <ul>
+            <li><b>Operation Mode</b>: High-speed main mode 1.8(V)~5.5(V) <i>(first drop down)</i></li>
+            <li><b>EVDD Setting</b>: 1.8(V)~5.5(V) <i>(second drop down)</i></li>
+            <li><b>fSXP Selector</b>: Low-speed on-chip oscillator <i>(you will need to scroll down a little)</i></li>
+        </ul>
+
+        <a target="_blank" href="img/clocks.gif"><img src="img/clocks.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.2">3.2 - System</h2>
+    <p>Select the <b>System</b> tab of the smart configurator and make the following settings:
+        <ul>
+            <li><b>On-chip debug operation setting</b>: COM Port Debugging</li>
+        </ul>
+
+        <a target="_blank" href="img/system.gif"><img src="img/system.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.3">3.3 - Components</h2>
+    <p>Select the <b>Components</b> tab of the smart configurator and using the <b>Add Components</b> button, add the following:
+        <ul>
+            <li><b>Capacitive Sensing Unit Driver</b></li>
+            <li><b>Touch Middleware</b></li>
+            <li><b>Interval Timer</b> <i>(<b>IMPORTANT:</b> Ensure when you click next that the dropdown Resource = ITL000)</i></li>
+            <li><b>Ports</b></li>
+        </ul>
+
+        <a target="_blank" href="img/components.gif"><img src="img/components.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.4">3.4 - Setup Ports</h2>
+    <p>Remaining in the <b>Components</b> tab:
+        <ol>
+            <li>Select the <b>Config_PORT</b> component</li>
+            <li>Enable <b>Port 5</b></li>
+            <li>Navigate to the newly avialable <b>PORT5</b> tab</li>
+            <li>Set <b>P50</b> and <b>P51</b> to outputs</li>
+            <li>Set both <b>P50</b> and <b>P51</b> to initial output high (1) <i>(turning off on board LED's by default)</i></li>
+        </ol>
+
+        <a target="_blank" href="img/setupports.gif"><img src="img/setupports.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.5">3.5 - Setup Low Power Timer</h2>
+    <p>Remaining in the <b>Components</b> tab:
+        <ol>
+            <li>Select the <b>Config_ITL000</b> component </li>
+            <li>Set the operation clock to <b>fSXP</b></li>
+            <li>Set the clock source to <b>fITL0/128</b></li>
+            <li>Set the interval to <b>20ms</b></li>
+            <li>Uncheck the detection of the interrupt checkbox</li>
+        </ol>
+
+        <a target="_blank" href="img/setuplptimer.gif"><img src="img/setuplptimer.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.6">3.6 - Setup CTSU</h2>
+    <p>Remaining in the <b>Components</b> tab:
+        <ol>
+            <li>Select the <b>r_ctsu</b> component </li>
+            <li>Set the <b>Data transfer of INCTSUWR and INTCTSURD</b> to <b>DTC</b> <i>(thus enabling CTSU to complete its operation in snooze mode)</i></li>
+            <li>Now Enable:
+            <ul>
+                <li><b>TSCAP</b></li>
+                <li><b>TS10</b></li>
+                <li><b>TS11</b></li>
+            </ul>
+        </ol>
+
+        <a target="_blank" href="img/setupctsu.gif"><img src="img/setupctsu.gif" class="zoomable"></a><br>
+    </p>
+
+    <h2 id="3.7">3.7 - Generate Code</h2>
+    <p>Now click <b>Generate Code</b>.<br>
+        <a target="_blank" href="img/generatecode.gif"><img src="img/generatecode.gif" class="zoomable"></a><br>
+    </p>
+    
+    <br><br>
+    <button class="nextPageButton" onclick="document.location='4-QE-Tools.html'">Next Page...</button>
+    
+</body>
+<script src="js/localnav.js"></script>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/index.css">
+    <script src="js/jquery-3.6.0.js"></script>
+    <link rel="stylesheet" href="js/highlight/styles/atom-one-light.min.css">
+    <script src="js/highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+    <a target="_blank" href="https://www.renesas.com/"><img src="img/renesas_logomark_s.png" class="logo"></a><br><br><br>
+
+    <ol id="nav" title="Lab Contents" class="sidebar-lists">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1-Project-Setup.html">1. Project Setup</a></li>
+        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
+        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
+        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
+        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
+        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
+        <li class="activeListItem"><a class="active" href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+    </ol>
+
+    <h1>7. Achieving & Measuring Low Power</h1>
+    <p>Here we will guide you through the necessary extra changes required to both achieve and measure the low currents in
+        the RL78/G23 128p FPB low power capacitive touch project.<br>
+        We will also present the current consumption results obtained from this project (including the changes outlined in this section).<br><br>
+
+        But before we go further, a description on general low power troubleshooting when looking at both this lab and embedded systems designs in general.<br><br>
+
+        Unfortunately, if we were to measure the current consumption of the RL78/G23 128p FPB in the project <b>created so far</b>,
+        you would find the current is quite high, likely several mA's.<br>
+        This is because achieving low power <b>always</b> requires system-wide considerations.<br><br>
+
+        It is not enough to <b>only</b> make low power settings in the capacitive touch peripheral and to use power saving modes (stop & snooze)
+        if the rest of the board & MCU has not been analysed for high consumption behaviours. We have an entire circuit (FPB) and MCU
+        which are both draining power - and we need to look at the whole system to find exactly where our currents are going -
+        then mitigate them. <i>or</i> at the very least account for them in our final measurements/evaluation.<br><br>
+
+        The most common mistake when evaluating low power performance of an MCU is that developers simply execute a low power instruction (e.g. __stop())
+        and expect instant low power results - unfortunately, embedded systems and electronics are fickle creatures and we need to look
+        <b>everywhere</b> for currents being consumed.<br><br>
+
+        Firstly we need to look at default power on behaviours like:<br>
+        <ul>
+            <li><b>Are there any unused GPIO inputs?</b> - This will cause through currents on floating pins.</li>
+            <li><b>Are any MCU external clock circuits active/enabled?</b> - More current!</li>
+            <li><b>Is the on-chip debug circuit enabled?</b> - Even more current (even if the debuggers disconnected!)</li>
+            <li><b>Is the debugger still physically connected?</b> - That's a second circuit you've plugged in so yes we're still probably adding current!</li>
+            <li><b>Is there any downstream device from your measurement point?</b> - linear regulators, buffer IC's etc - Add some more current!</li>
+            <li><b>Are there any potential dividers or engaged pull-up's/pull-down's?</b> - Current, current & MORE CURRENT!</li>
+        </ul>
+
+        And secondly does each peripheral being used have a low power consumption mode/setting/behaviour?<br>
+        In this project we have made use of the following <b>peripheral features</b> to reduce power:<br>
+        <ul>
+            <li><b>ELCL</b> - linking events to avoid unnecessary CPU wakeup.</li>
+            <li><b>DTC</b> - To perform CTSU peripheral setup during a scan, which also avoids CPU wakeup.</li>
+            <li><b>CTSU External Trigger</b> - Allowing us to trigger the CTSU scan using a signal, such as a timer, instead of a software write.</li>
+            <li><b>Low Power Timer</b> - The lowest power timer on the device which runs even in STOP mode to control scan frequency.</li>
+        </ul>
+
+        Putting this together, we can summarise a few important take home messages that will help when trying to achieve low power when working with the RL78 family:<br>
+        <ul>
+            <li><b>Remove the debugger <u>completely</u></b> - By removing the debugger we can guarantee the circuit we are trying to reduce the current
+                consumption on is the only circuit we are dealing with and that hidden emulator/debugger circuitry is not skewing our results.</li>
+            <li><b>Disable the on-chip debugger circuit</b> - Nothing is free and debugging is no exception to this rule - the circuit which connects to the debugger on 
+                the RL78 family must be enabled and active in order to work which means supplying a clock and power which will also increase general consumption.<br>
+            Therefore using the <b>option bytes</b> we can and should disable this circuit and remove its power consumption completely when performing standalone
+            consumtpion testing.</li>
+            <li><b>GPIO (& unused pins)</b> - The single most common mistake is people observing <i>"weird floating currents that seem to change every time I measure them"</i> 
+                and blaming the MCU.<br>
+            This is 99.999% of the time an external circuit/GPIO problem, so always ensure you check these things:<br>
+        <ul>
+            <li>What does the <b>unused pins section</b> of the hardware user manual say? and have I fulfilled these requirements?</li>
+            <li>Are any <b>inputs floating</b>? if yes, you have  through current which is where a floating charge/potential causes a fluxuating current to
+            flow between the input buffers supply rails.<br>
+            <i>Possible solutions</i>: Set these pins to output and fix output high/low during initialisation, use a pull-up/down to fix the input or (if the device permits), disable the input buffer.
+            <li>Are any <b>external clock input circuits</b> enabled & floating? if so, disable the circuit if unused.</li>
+            <li>Are their any <b>external devices/components</b> (potential dividers are commonly missed) that are <b>downstream</b> from your current consumption measuring point?<br>
+            e.g. do you have a linear regulator with a quiescent current in your measurement path? or an external buffer IC to increase drive strength on a GPIO? or a mux/de-mux?<br>
+        All of these devices have currents associated, so take extreme care to analyse what they are adding to the system and ensure they are accounted for when analysing your systems current consumption.</li>
+    </li>
+        </ul></li>
+            <li><b>Snooze/Stop mode (peripherals)</b> - When using the low power states of the RL78 - ensure you look at what perihperals are available to run in these modes and ask
+                "can I reduce my run time by operating these peripherals while the CPU is off and we are in snooze mode?".<br>
+            In general, try and spend as much time in both <b>stop</b> and <b>snooze</b> mode as possible.</li>
+        </ul>
+
+        Another point is device duty, that is the time the device is "awake" vs "stopped".<br>
+        Average power consumption can be decreased by waking up and doing the work <b>faster</b>,
+        that is ensuring that when the CPU is awake, we run at maximum speed to reduce total awake time.<br>
+        This varies on system design and requirements, but always analyse the duty which you are awake and think not only to reduce current magnitude,
+        but also the current duration.<br><br>
+
+        Finally - use <b>good measurement instruments</b>.<br>
+        The RL78 can operate at &lt;400nA - meaning you need to <b>comfortably</b> measure &lt;400nA
+        using both high <b>resolution</b> and high <b>accuracy</b> equipment to observe the current/power profile of the deivce.
+        Typical handheld multi-meters will not be sufficient here. Bench-top multimeters, oscilloscopes and dedicated power profilers will be required to observe the current
+        <b>profile.</b>
+    </p>
+
+    <h2 id="7.1">7.1 - Generate Release Binary</h2>
+    <p>Now with the above thoughts in mind, lets ensure our project generates a binary file which we can download using a flash programmer.<br>
+        This is so we can run the application standalone i.e. without the debugger and related on-chip circuitry.<br><br>
+
+        Instructions to output a motorola hex file (*.mot) for use with the Renesas Flash Programmer Tool:<br>
+        <ul>
+            <li><b>[Right Click] Project &rarr; Properties &rarr; C/C++ Build &rarr; Settings &rarr; Converter &rarr; Output</b><br></li>
+            <li><b>Enable</b> "Output hex file" checkbox.</li>
+            <li>Click <b>Apply & Close</b>.</li>
+        </ul>
+        Once the setting above has been made, <b>re-build the project</b>.<br>
+        <a target="_blank" href="img/outputmot.gif"><img src="img/outputmot.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="7.2">7.2 - Hardware Changes</h2>
+    <p>The RL78/G23 128p FPB contains some circuitry which hinders our ability to perform true low power evaluation.<br>
+        The following steps <i>can</i> be taken to remove the causes of almost all extra current consumption in hardware:<br>
+        <ul>
+            <li>Remove <b>R4</b> - <i>Disconnects the power LED</i>.</li>
+            <li>Remove <b>U3</b> - <i>COM port UART buffer IC - be careful as this will affect debugging capabilities</i>.</li>
+            <li>After flashing the device - disable the FTDI chip by <b>shorting J17</b>.</li>
+        </ul>
+        <b>Important note:</b> These changes are in effect damaging the board - another option would be to compute the currents consumed by these devices and factor them into your analysis.
+    </p>
+
+    <h2 id="7.3">7.3 - Software Changes</h2>
+    <p>The software/project written so far has the foundation for low power implemented by making use of the correct peripherals and low power modes.<br>
+        But we have not amended the rest of the system to enable low power, therefore the following changes are required:<br>
+        <ul>
+            <li>In the <b>Components</b> tab of the smart configurator, select the <b>Config_PORT</b> component and set <b><u>ALL</u></b> pins to <b>OUTPUTS</b> except:
+            <ul>
+                <li><b>P05, P06, P30</b> - <b><u>UNUSED</u></b> - Used for capactive touch.</li>
+                <li><b>P123, P124</b> - <b><u>UNUSED</u></b> - Oscilllator, fixed in code.</li>
+                <li><b>P20, P21</b> - <b><u>INPUT</u></b> - ADC reference, tied to EVDD/GND in hardware (could cut the trace on the board instead).</li>
+                <li><b>P137</b> - <b><u>INPUT</u></b> - Input only - ensure you check the <b>disable input buffer</b> option.</li>
+            </ul>
+            </li>
+            <li>In the <b>Components</b> tab of the smart configurator, select the <b>Config_ITL000</b> component and set the <b>interval time</b> to <b>200ms</b>.</li>
+            <ul><li>Please note that such a large scan interval requires parameter adjustment in the QE tools to ensure responsiveness.<br>
+                Please see the QE tools web page and training material available there to learn more as advanced capactive touch tuning is not in the scope of the lab.<br>
+                i.e. without advanced tuning, it will take multiple seconds of pressing a button for the middleware to detect a touch at a scan interval of 200ms.</li></ul>
+            <li>In the <b>System</b> tab of the smart configurator <b><u>disable</u></b> the use of the <b>on-chip debug</b>.</li>
+            <li>Update Clock register <b>CMC</b> to enable P123 & P124 as clock inputs but <b>disable oscillator circuit</b> to remove through current.<br>
+                Make the following <b>edit</b>: <i>Line 572</i> in file <i>smc_gen/r_bsp/mcu/rl78_g23/mcu_clocks.c</i><br>
+                <pre><code class="C">/*
+* smc_gen/r_bsp/mcu/rl78_g23/mcu_clocks.c
+* Line 572
+* cmc_tmp = 0x00U;
+* becomes:
+*/
+cmc_tmp = 0x40U; /* Set P123 & P124 to XT1 & 2 oscillation</code></pre>
+            </li>
+            <li>Include following code at start of qe_sample_main function:<br>
+                <pre><code class="C">CSC |= 0x40U; /* Stops XT1 oscillation circuit from working, place anytime during initialisation*/</code></pre>
+            </li>
+        </ul>
+    </p>
+
+    <h2 id="7.4">7.4 - Flashing using RFP</h2>
+    <p>The device must be flashed using Renesas Flash Programmer because we have disable debugging.<br>
+        First launch RFP and connect to the baord, the correct settings are:<br>
+        <ul>
+            <li>Microcontroller: RL78/G2x</li>
+            <li>Tool: COM Port</li>
+            <li>Interface: 2 Wire UART</li>
+            <li>Tool Details: Select appropriate COM port</li>
+        </ul>
+        Then using the browse button, navigate to the binary file and open it.<br>
+        Then finally click "Start" to <b>erase &rarr; prorgam &rarr; verify</b> the device.<br>
+        <a target="_blank" href="img/rfp.gif"><img src="img/rfp.gif"></a>
+    </p>
+
+    <h2 id="7.5">7.5 - <i>[informative]</i><br>
+        Results</h2>
+    <p>The image below shows the full 20ms scan period - where the average current sare as follows:<br>
+        <ul>
+            <li>STOP mode current = ~543nA (over 18.425ms)</li>
+            <li>Active current = ~1.586mA (over 1.575ms)</li>
+            <li>Total current = 101&micro;A (over 20ms)</li>
+        </ul>
+        <a target="_blank" href="img/cap_touch_current_all.png"><img src="img/cap_touch_current_all.png"></a><br><br>
+
+        These currents are OK but we can greatly reduce these by simply increasing the scan interval time, therefore reducing the devies active duty.<br>
+        Knowing the scan time is fixed at 1.575ms, we can increase the total time to 200ms which gives us a stop mode time of 198.425ms - therefore using
+        the following fomula we get:<br>
+        <code>I<sub>av</sub> = (I<sub>stop</sub> * (t<sub>stop</sub>/t<sub>total</sub>)) + (I<sub>active</sub> * (t<sub>active</sub>/t<sub>total</sub>))</code><br>
+        <code>I<sub>av</sub> = (543nA * (198.425ms/200ms)) + (1.586mA * (1.575ms/200ms))</code><br>
+        <code>I<sub>av</sub> = <b>13.028&micro;A</b></code><br><br>
+        Now taking a closer look at what is occuring during our "active" period in the image below.<br>
+        There is two very obvious steps in the current, during the first step up to ~1.3mA there is 6 flurries of activity, before stepping up to ~3.8mA.<br>
+        Here we are seeing the RL78's snooze mode in action - whereby the timer has triggered the CTSU, and the CTSU is performing a scan. The reason
+        for 6 spikes of current is because there are 2 electrodes, and we are performing 3 frequency scanning - that is the CTSU perihperal is pulsing the 2 electrodes at 3 different
+        frequenices to improve noise immunity.<br>
+        Then the scan completes and the device jumps up in current where we can see a clear return to full "running" or "active" mode. It is clear how much power is saved by utlising
+        snooze mode here as this current consumption would have been ~3.8mA the enitre scan period, instead of the ~1.3mA we are seeing.
+        <br><br>
+
+        <a target="_blank" href="img/cap_touch_current_all_zoom.png"><img src="img/cap_touch_current_all_zoom.png"></a>
+    </p>
+    
+    <br><br>
+    <button class="nextPageButton" onclick="document.location='index.html'">Home</button>
+    
+</body>
+<script src="js/localnav.js"></script>
+
+</html>
