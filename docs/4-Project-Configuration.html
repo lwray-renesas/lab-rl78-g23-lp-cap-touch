@@ -14,20 +14,21 @@
 
     <ol id="nav" title="Lab Contents" class="sidebar-lists">
         <li><a href="index.html">Home</a></li>
-        <li><a href="1-Preparation.html">1. Preparation</a></li>
-        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
-        <li class="activeListItem"><a class="active" href="3-Project-Configuration.html">3. Configuring the Project</a></li>
-        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
-        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
-        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
-        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+        <li><a href="1-Installation.html">1. Installation</a></li>
+        <li><a href="2-Preparation.html">2. Preparation</a></li>
+        <li><a href="3-Project-Creation.html">3. Creating the Project</a></li>
+        <li class="activeListItem"><a class="active" href="4-Project-Configuration.html">4. Configuring the Project</a></li>
+        <li><a href="5-QE-Tools.html">5. QE Tools</a></li>
+        <li><a href="6-Project-Build.html">6. Building the Project</a></li>
+        <li><a href="7-Project-Debug.html">7. Debugging the Project</a></li>
+        <li><a href="8-Achieving-Measuring-Low-Power.html">8. Achieving & Measuring Low Power</a></li>
     </ol>
 
-    <h1>3. Configuring the Project</h1>
+    <h1>4. Configuring the Project</h1>
     <p>Here we will guide you through configuring the RL78/G23 128p FPB low power capacitive touch project using the smart configurator.
     </p>
 
-    <h2 id="3.1">3.1 - Clocks & Supply</h2>
+    <h2 id="4.1">4.1 - Clocks & Supply</h2>
     <p>Select the <b>Clocks</b> tab of the smart configurator and make the following settings:
         <ul>
             <li><b>Operation Mode</b>: High-speed main mode 1.8(V)~5.5(V) <i>(first drop down)</i></li>
@@ -38,7 +39,7 @@
         <a target="_blank" href="img/clocks.gif"><img src="img/clocks.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.2">3.2 - System</h2>
+    <h2 id="4.2">4.2 - System</h2>
     <p>Select the <b>System</b> tab of the smart configurator and make the following settings:
         <ul>
             <li><b>On-chip debug operation setting</b>: COM Port Debugging</li>
@@ -47,7 +48,7 @@
         <a target="_blank" href="img/system.gif"><img src="img/system.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.3">3.3 - Components</h2>
+    <h2 id="4.3">4.3 - Components</h2>
     <p>Select the <b>Components</b> tab of the smart configurator and using the <b>Add Components</b> button, add the following:
         <ul>
             <li><b>Capacitive Sensing Unit Driver</b></li>
@@ -59,7 +60,7 @@
         <a target="_blank" href="img/components.gif"><img src="img/components.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.4">3.4 - Setup Ports</h2>
+    <h2 id="4.4">4.4 - Setup Ports</h2>
     <p>Remaining in the <b>Components</b> tab:
         <ol>
             <li>Select the <b>Config_PORT</b> component</li>
@@ -72,7 +73,7 @@
         <a target="_blank" href="img/setupports.gif"><img src="img/setupports.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.5">3.5 - Setup Low Power Timer</h2>
+    <h2 id="4.5">4.5 - Setup Low Power Timer</h2>
     <p>Remaining in the <b>Components</b> tab:
         <ol>
             <li>Select the <b>Config_ITL000</b> component </li>
@@ -85,7 +86,7 @@
         <a target="_blank" href="img/setuplptimer.gif"><img src="img/setuplptimer.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.6">3.6 - Setup CTSU</h2>
+    <h2 id="4.6">4.6 - Setup CTSU</h2>
     <p>Remaining in the <b>Components</b> tab:
         <ol>
             <li>Select the <b>r_ctsu</b> component </li>
@@ -101,13 +102,13 @@
         <a target="_blank" href="img/setupctsu.gif"><img src="img/setupctsu.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="3.7">3.7 - Generate Code</h2>
+    <h2 id="4.7">4.7 - Generate Code</h2>
     <p>Now click <b>Generate Code</b>.<br>
         <a target="_blank" href="img/generatecode.gif"><img src="img/generatecode.gif" class="zoomable"></a><br>
     </p>
     
     <br><br>
-    <button class="nextPageButton" onclick="document.location='4-QE-Tools.html'">Next Page...</button>
+    <button class="nextPageButton" onclick="document.location='5-QE-Tools.html'">Next Page...</button>
     
 </body>
 <script src="js/localnav.js"></script>

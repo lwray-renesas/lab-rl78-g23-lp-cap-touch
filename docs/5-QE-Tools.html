@@ -14,28 +14,29 @@
 
     <ol id="nav" title="Lab Contents" class="sidebar-lists">
         <li><a href="index.html">Home</a></li>
-        <li><a href="1-Preparation.html">1. Preparation</a></li>
-        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
-        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
-        <li class="activeListItem"><a class="active" href="4-QE-Tools.html">4. QE Tools</a></li>
-        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
-        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
-        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+        <li><a href="1-Installation.html">1. Installation</a></li>
+        <li><a href="2-Preparation.html">2. Preparation</a></li>
+        <li><a href="3-Project-Creation.html">3. Creating the Project</a></li>
+        <li><a href="4-Project-Configuration.html">4. Configuring the Project</a></li>
+        <li class="activeListItem"><a class="active" href="5-QE-Tools.html">5. QE Tools</a></li>
+        <li><a href="6-Project-Build.html">6. Building the Project</a></li>
+        <li><a href="7-Project-Debug.html">7. Debugging the Project</a></li>
+        <li><a href="8-Achieving-Measuring-Low-Power.html">8. Achieving & Measuring Low Power</a></li>
     </ol>
 
-    <h1>4. QE Tools</h1>
+    <h1>5. QE Tools</h1>
     <p>Here we will guide you through the utmost basic use of the QE tools for capactive touch, in order to tune the RL78/G23 128p FPB and output both
         the tuning parameters and some sample code.
     </p>
 
-    <h2 id="4.1">4.1 - Launching QE</h2>
+    <h2 id="5.1">5.1 - Launching QE</h2>
     <p>First launch the QE Tools.<br>
         <b>Renesas Views &rarr; Renesas QE &rarr; CapTouch Main</b><br>
         <a target="_blank" href="img/launchqe.gif"><img src="img/launchqe.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="4.2">4.2 - QE Configuration</h2>
-    <p>Now in the <b>1. Preparation</b> column of the CapTouch Main (QE) window, use the first drop down to select your project.<br>
+    <h2 id="5.2">5.2 - QE Configuration</h2>
+    <p>Now in the <b>2. Preparation</b> column of the CapTouch Main (QE) window, use the first drop down to select your project.<br>
         Then in the second drop down select <b>Create a new configuration</b>.<br>
         When the configuration editor appears, select <b>Button</b> and create two buttons bt clickong on the blank work area twice.<br>
         Press <b>Esc</b> to cancel making buttons on click.<br>
@@ -44,7 +45,7 @@
         <a target="_blank" href="img/qeconfig.gif"><img src="img/qeconfig.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="4.3">4.3 - Debug Configuration</h2>
+    <h2 id="5.3">5.3 - Debug Configuration</h2>
     <p>In order to run the tuning on this project we must make some adjustments to the debug configurations, this is so we can use the COM port debugger
         to perfrom the tuning process.<br>
         <b>[Right-Click] project &rarr; Debug As &rarr; Debug Configurations... &rarr; Renesas GDB Hardware debug configuration (for your project)</b>.<br>
@@ -54,9 +55,9 @@
         <a target="_blank" href="img/debugconfig.gif"><img src="img/debugconfig.gif" class="zoomable"></a><br>
     </p>
 
-    <h2 id="4.4">4.4 - Tuning</h2>
+    <h2 id="5.4">5.4 - Tuning</h2>
     <p>To tune the capactive touch please follow along with the <b>video</b> below.<br>
-        To start the tuning process ensure in column <b>1. Preparation</b> that in both dropdowns the project and tifcfg are
+        To start the tuning process ensure in column <b>2. Preparation</b> that in both dropdowns the project and tifcfg are
         approriately selected and only then to click <b>Start Tuning</b> in column <b>2. Tuning</b>.<br><br>
         <video width="80%" controls>
         <source src="img/lp_cap_touch.mp4" type="video/mp4">
@@ -69,7 +70,7 @@
       <a target="_blank" href="img/touch.png"><img src="img/touch.png"></a><br>
     </p>
 
-    <h2 id="4.5">4.5 - Output & Sample Code</h2>
+    <h2 id="5.5">5.5 - Output & Sample Code</h2>
     <p>Now to retrieve the tuning data computed in the previous step we must acquire the parameter file.<br>
         First though, to enable the snooze operation and hardware triggering of the CTSU we have to enable the <b>Use an external trigger</b> checkbox.<br>
         Then click <b>Output Parameters Files</b>.<br>
@@ -80,7 +81,7 @@
     </p>
     
     <br><br>
-    <button class="nextPageButton" onclick="document.location='5-Project-Build.html'">Next Page...</button>
+    <button class="nextPageButton" onclick="document.location='6-Project-Build.html'">Next Page...</button>
     
 </body>
 <script src="js/localnav.js"></script>

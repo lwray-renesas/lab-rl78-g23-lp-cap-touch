@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/index.css">
+    <script src="js/jquery-3.6.0.js"></script>
+</head>
+
+<body>
+    <a target="_blank" href="https://www.renesas.com/"><img src="img/renesas_logomark_s.png" class="logo"></a><br><br><br>
+
+    <ol id="nav" title="Lab Contents" class="sidebar-lists">
+        <li><a href="index.html">Home</a></li>
+        <li class="activeListItem"><a class="active" href="1-Installation.html">1. Installation</a></li>
+        <li><a href="2-Preparation.html">2. Preparation</a></li>
+        <li><a href="3-Project-Creation.html">3. Creating the Project</a></li>
+        <li><a href="4-Project-Configuration.html">4. Configuring the Project</a></li>
+        <li><a href="5-QE-Tools.html">5. QE Tools</a></li>
+        <li><a href="6-Project-Build.html">6. Building the Project</a></li>
+        <li><a href="7-Project-Debug.html">7. Debugging the Project</a></li>
+        <li><a href="8-Achieving-Measuring-Low-Power.html">8. Achieving & Measuring Low Power</a></li>
+    </ol>
+
+    <h1>1. Setting up the Project</h1>
+    <p>Here we will guide you through the tool installation and startup for the lab.<br>
+    </p>
+
+    <h2 id="1.1">1.1 - Download</h2>
+    <p>Go to the <a href="https://www.renesas.com/us/en/software-tool/e-studio">e<sup>2</sup>studio landing page</a> and
+        download the latest release.<br>
+        To do this, navigate to the Downloads section and select the latest windows installer for
+        e<sup>2</sup>studio.<br>
+        You will be prompted to login to your My Renesas account - please do so.<br>
+        <a target="_blank" href="img/downloade2.gif"><img src="img/downloade2.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="1.2">1.2 - Start the installer</h2>
+    <p>Once downloaded, unzip and launch the installer (this usually works best with admin rights when using a workplace
+        computer).<br>
+        The installer may take a minute to extract the contents, so please be patient!
+    </p>
+
+    <h2 id="1.3">1.3 - Installation type</h2>
+    <p>If you have multiple installations you will be presented with the option to install or upgrade.<br>
+        Here I will install to a new location - this is personal preference in seperating
+        toolchain variants.<br>
+        <a target="_blank" href="img/install.gif"><img src="img/install.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="1.4">1.4 - Edit install location</h2>
+    <p>The use of a non-default install location can greatly help with organising toolchain installations.<br>
+        To change the default click [Change...] and browse to the desired location.<br>
+        <a target="_blank" href="img/changelocation.gif"><img src="img/changelocation.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="1.5">1.5 - Acquire RL78 components</h2>
+    <p>First click [Next >] and select the RL78 family of components.<br>
+        <a target="_blank" href="img/selectRL78.gif"><img src="img/selectRL78.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="1.6">1.6 - Customisations</h2>
+    <p>We will go through a somewhat extended custom installation to ensure moving forward you are prepared to
+        start developing with all Renesas tools.
+
+    <h3>1.6.1 - Acquire GIT integration features</h3>
+    Then select the Git Integration in Extra Features.<br>
+    <a target="_blank" href="img/selectGit.gif"><img src="img/selectGit.gif" class="zoomable"></a><br><br>
+
+    <h3>1.6.2 - Acquire QE for capacitive touch tools & GCC toolchain</h3>
+    Now moving over to <b>Additional Software</b>, include support for <b>QE for capactive touch</b> and the <b>GCC toolchain.</b><br>
+    <a target="_blank" href="img/customAndAdd.gif"><img src="img/customAndAdd.gif" class="zoomable"></a><br><br>
+    </p>
+
+    <h2 id="1.7">1.7 - Finish install</h2>
+    <p>
+        Finally accept the license agreement (after careful review...) and accept the default selections for the
+        rest of the installation and proceed to install.<br>
+        <a target="_blank" href="img/finishInstall.gif"><img src="img/finishInstall.gif" class="zoomable"></a>
+    </p>
+
+    <h2 id="1.8">1.8 - Startup</h2>
+    <p>Firstly start e<sup>2</sup>studio either via the start menu, desktop shortcut or manually using the executable in the install location.
+    </p>
+
+    <h2 id="1.9">1.9 - Workspace</h2>
+    <p>After some initial loading the workspace dialog will appear. This dialog can be used to select an existing workspace or new one.<br>
+        A workspace is <i>a project staging area</i>, much like the solution area of visual studio and it contains one or multiple projects.<br>
+        These projects can reference other projects within the same workspace using workspace relative paths.<br>
+        The workspace folder also contains some meta-data specific to e<sup>2</sup>studio and this is version dependent.<br>
+        Typically a shorter path length to your workspace is a good idea - the image below shows an example workspace path.<br>
+        By selecting browse, you can browse to the appropriate location and also create a new folder to house your workspace.<br>
+        <a target="_blank" href="img/workspace.png"><img src="img/workspace.png"></a><br>
+        Finally click launch when you are happy with your workspace location.
+    </p>
+
+    <h2 id="1.10">1.10 - Toolchain Registration</h2>
+    <p>When starting e<sup>2</sup>studio for the first time you may be prompted to register the installed toolchains.<br>
+        Please ensure you select all toolchains available and register them - this allows e<sup>2</sup>studio to use these toolchains
+        in any projects moving forward.<br>
+        The image below shows the selections to be made in the toolcahin registration dialog.<br>
+        <a target="_blank" href="img/toolchain_registration.png"><img src="img/toolchain_registration.png"></a><br>
+        Specifically those selections are:
+        <ol>
+            <li>Click "Select All"</li>
+            <li>Check "Enable 'Toolchain integration' on startup"</li>
+            <li>Click "Register"</li>
+        </ol>
+    </p>
+
+    <h2 id="1.11">1.11 - My Renesas Login</h2>
+    <p>e<sup>2</sup>studio may prompt to provide MyRenesas login credentials - this will faciltate acquiring extra-tools/plugins/update later.<br>
+        As shown in the image below, proivde your login credentials, decide whether you would like Renesas to collect usage data to improve our products and services and login.<br>
+        <a target="_blank" href="img/myrenesaslogin.png"><img src="img/myrenesaslogin.png"></a><br>
+    </p>
+
+    <h2 id="1.12">1.12 - Welcome Page</h2>
+    <p>Finally you will be presented with the welcome page.<br>
+        <a target="_blank" href="img/initialscreen.png"><img src="img/initialscreen.png" class="zoomable"></a><br>
+    </p>
+    
+    <br><br>
+    <button class="nextPageButton" onclick="document.location='2-Preparation.html'">Next Page...</button>
+    
+</body>
+<script src="js/localnav.js"></script>
+
+</html>

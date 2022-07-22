@@ -15,20 +15,21 @@
 
     <ol id="nav" title="Lab Contents" class="sidebar-lists">
         <li><a href="index.html">Home</a></li>
-        <li><a href="1-Preparation.html">1. Preparation</a></li>
-        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
-        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
-        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
-        <li class="activeListItem"><a class="active" href="5-Project-Build.html">5. Building the Project</a></li>
-        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
-        <li><a href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+        <li><a href="1-Installation.html">1. Installation</a></li>
+        <li><a href="2-Preparation.html">2. Preparation</a></li>
+        <li><a href="3-Project-Creation.html">3. Creating the Project</a></li>
+        <li><a href="4-Project-Configuration.html">4. Configuring the Project</a></li>
+        <li><a href="5-QE-Tools.html">5. QE Tools</a></li>
+        <li class="activeListItem"><a class="active" href="6-Project-Build.html">6. Building the Project</a></li>
+        <li><a href="7-Project-Debug.html">7. Debugging the Project</a></li>
+        <li><a href="8-Achieving-Measuring-Low-Power.html">8. Achieving & Measuring Low Power</a></li>
     </ol>
 
-    <h1>5. Building the Project</h1>
+    <h1>6. Building the Project</h1>
     <p>Here we will guide you through including the application code and building the RL78/G23 128p FPB low power capacitive touch project.
     </p>
 
-    <h2 id="5.1">5.1 - Application Code</h2>
+    <h2 id="6.1">6.1 - Application Code</h2>
     <p>Navigate to the file which contains your <b>main function</b> located in <i>src/{PROJECT_NAME}.c</i> file and <b>replace the contents of the file</b> with:
     <pre><code class="C">#include "r_smc_entry.h"
 
@@ -132,7 +133,7 @@ void qe_touch_main(void)
 
     </p>
 
-    <h2 id="5.2">5.2 - Build the project</h2>
+    <h2 id="6.2">6.2 - Build the project</h2>
     <p>Now to build the project either:<br>
         <b>[Right-Click] project &rarr; Build Project</b>.<br>
         <i>or</i><br>
@@ -140,7 +141,7 @@ void qe_touch_main(void)
     </p>
 
     <br><br>
-    <button class="nextPageButton" onclick="document.location='6-Project-Debug.html'">Next Page...</button>
+    <button class="nextPageButton" onclick="document.location='7-Project-Debug.html'">Next Page...</button>
 
 </body>
 <script src="js/localnav.js"></script>

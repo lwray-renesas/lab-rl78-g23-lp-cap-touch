@@ -14,16 +14,17 @@
 
     <ol id="nav" title="Lab Contents" class="sidebar-lists">
         <li><a href="index.html">Home</a></li>
-        <li><a href="1-Preparation.html">1. Preparation</a></li>
-        <li><a href="2-Project-Creation.html">2. Creating the Project</a></li>
-        <li><a href="3-Project-Configuration.html">3. Configuring the Project</a></li>
-        <li><a href="4-QE-Tools.html">4. QE Tools</a></li>
-        <li><a href="5-Project-Build.html">5. Building the Project</a></li>
-        <li><a href="6-Project-Debug.html">6. Debugging the Project</a></li>
-        <li class="activeListItem"><a class="active" href="7-Achieving-Measuring-Low-Power.html">7. Achieving & Measuring Low Power</a></li>
+        <li><a href="1-Installation.html">1. Installation</a></li>
+        <li><a href="2-Preparation.html">2. Preparation</a></li>
+        <li><a href="3-Project-Creation.html">3. Creating the Project</a></li>
+        <li><a href="4-Project-Configuration.html">4. Configuring the Project</a></li>
+        <li><a href="5-QE-Tools.html">5. QE Tools</a></li>
+        <li><a href="6-Project-Build.html">6. Building the Project</a></li>
+        <li><a href="7-Project-Debug.html">7. Debugging the Project</a></li>
+        <li class="activeListItem"><a class="active" href="8-Achieving-Measuring-Low-Power.html">8. Achieving & Measuring Low Power</a></li>
     </ol>
 
-    <h1>7. Achieving & Measuring Low Power</h1>
+    <h1>8. Achieving & Measuring Low Power</h1>
     <p>Here we will guide you through the necessary extra changes required to both achieve and measure the low currents in
         the RL78/G23 128p FPB low power capacitive touch project.<br>
         We will also present the current consumption results obtained from this project (including the changes outlined in this section).<br><br>
@@ -102,7 +103,7 @@
         <b>profile.</b>
     </p>
 
-    <h2 id="7.1">7.1 - Generate Release Binary</h2>
+    <h2 id="8.1">8.1 - Generate Release Binary</h2>
     <p>Now with the above thoughts in mind, lets ensure our project generates a binary file which we can download using a flash programmer.<br>
         This is so we can run the application standalone i.e. without the debugger and related on-chip circuitry.<br><br>
 
@@ -116,7 +117,7 @@
         <a target="_blank" href="img/outputmot.gif"><img src="img/outputmot.gif" class="zoomable"></a>
     </p>
 
-    <h2 id="7.2">7.2 - Hardware Changes</h2>
+    <h2 id="8.2">8.2 - Hardware Changes</h2>
     <p>The RL78/G23 128p FPB contains some circuitry which hinders our ability to perform true low power evaluation.<br>
         The following steps <i>can</i> be taken to remove the causes of almost all extra current consumption in hardware:<br>
         <ul>
@@ -127,7 +128,7 @@
         <b>Important note:</b> These changes are in effect damaging the board - another option would be to compute the currents consumed by these devices and factor them into your analysis.
     </p>
 
-    <h2 id="7.3">7.3 - Software Changes</h2>
+    <h2 id="8.3">8.3 - Software Changes</h2>
     <p>The software/project written so far has the foundation for low power implemented by making use of the correct peripherals and low power modes.<br>
         But we have not amended the rest of the system to enable low power, therefore the following changes are required:<br>
         <ul>
@@ -160,7 +161,7 @@ cmc_tmp = 0x40U; /* Set P123 & P124 to XT1 & 2 oscillation</code></pre>
         </ul>
     </p>
 
-    <h2 id="7.4">7.4 - Flashing using RFP</h2>
+    <h2 id="8.4">8.4 - Flashing using RFP</h2>
     <p>The device must be flashed using Renesas Flash Programmer because we have disable debugging.<br>
         First launch RFP and connect to the baord, the correct settings are:<br>
         <ul>
@@ -174,7 +175,7 @@ cmc_tmp = 0x40U; /* Set P123 & P124 to XT1 & 2 oscillation</code></pre>
         <a target="_blank" href="img/rfp.gif"><img src="img/rfp.gif"></a>
     </p>
 
-    <h2 id="7.5">7.5 - <i>[informative]</i><br>
+    <h2 id="8.5">8.5 - <i>[informative]</i><br>
         Results</h2>
     <p>The image below shows the full 20ms scan period - where the average currents are as follows:<br>
         <ul>
